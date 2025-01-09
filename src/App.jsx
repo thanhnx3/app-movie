@@ -14,9 +14,7 @@ function App() {
                     return <Route key={index} path={data.path} element={<Page />} />;
                 })}
             </Routes>
-
             <Footer />
-            <></>
         </>
     );
 }

@@ -1,11 +1,10 @@
-import Info from '../pages/Cartoon/cartoon';
-import Cartoon from '../pages/Info/info';
+import Cartoon from '../pages/Cartoon/cartoon';
+import Info from '../pages/Info/info';
 import Movie from '../pages/Movie/movie';
 import News from '../pages/News/news';
 import Search from '../pages/Search/search';
 import TV from '../pages/TV/tv';
 import Watch from '../pages/Watch/watch';
-
 
 import Content from '../components/Content/content';
 
