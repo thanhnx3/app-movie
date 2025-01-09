@@ -125,7 +125,7 @@ function Header() {
         {isMenuOpen && (
           <nav className="md:hidden bg-gray-800 text-white text-sm right-0 top-full  w-48  absolute">
             <Link
-              to="/news/phim-moi"
+              to="/news"
               className="block px-4 py-2 hover:bg-gray-700 hover:border-b-2 hover:border-blue-500"
             >
               Phim Mới Cập Nhật
