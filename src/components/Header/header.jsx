@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 function Header() {
@@ -74,6 +74,12 @@ function Header() {
             >
               Phim Bộ
             </Link>
+            <Link
+              to="/shows"
+              className="hover:text-gray-300 hover:border-b-2 hover:border-blue-500 px-2 py-1 transition-all duration-300"
+            >
+              TV Shows
+            </Link>
           </nav>
           <div
             className="relative flex-1 max-w-[250px] md:max-w-[250px] ml-auto"
@@ -147,6 +153,12 @@ function Header() {
               className="block px-4 py-2 hover:bg-gray-700 hover:border-b-2 hover:border-blue-500"
             >
               Phim Bộ
+            </Link>
+            <Link
+              to="/shows"
+              className="block px-4 py-2 hover:bg-gray-700 hover:border-b-2 hover:border-blue-500"
+            >
+              TV Shows
             </Link>
           </nav>
         )}

@@ -5,6 +5,7 @@ import News from '../pages/News/news';
 import Search from '../pages/Search/search';
 import TV from '../pages/TV/tv';
 import Watch from '../pages/Watch/watch';
+import TVShows from '../pages/TV Shows/shows';
 
 import Content from '../components/Content/content';
 
@@ -17,6 +18,7 @@ const routerPublic = [
     { path: '/search', component: Search },
     { path: '/info/:slug', component: Info },
     { path: '/watch/:slug', component: Watch },
+    { path: '/shows', component: TVShows },
 ];
 
 export default routerPublic;

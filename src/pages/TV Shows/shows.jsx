@@ -1,41 +1,54 @@
 import { useEffect, useState } from "react";
-import { Play, Star, Film, ChevronLeft, ChevronRight } from "lucide-react";
-import { generateMovieRating, formatRating } from "../../routes/rating"; 
+import { Play, Star, Monitor, ChevronLeft, ChevronRight } from "lucide-react";
+import { generateMovieRating, formatRating } from "../../routes/rating";
 
-function Movie() {
-  const [movie, setMovie] = useState([]);
+function TVShows() {
+  const [tvShows, setTVShows] = useState([]);
   const [title, setTitle] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  // ID phim giả lập cho demo - trong ứng dụng thực tế sẽ lấy từ useParams
-  const movieId = "phim-le";
+  const tvShowsId = "tv-shows";
 
-  const fetchMovies = async (page = 1) => {
+  const fetchTVShows = async (page = 1) => {
     setLoading(true);
     try {
-      const response = await fetch(`https://phimapi.com/v1/api/danh-sach/${movieId}?limit=24&page=${page}`);
-      const phimle = await response.json();
+      const response = await fetch(`https://phimapi.com/v1/api/danh-sach/${tvShowsId}?limit=24&page=${page}`);
+      const data = await response.json();
       
-      console.log("Dữ liệu Movie:", phimle);
+      console.log("Dữ liệu TV Shows:", data);
       
-      if (phimle.data) {
-        setMovie(phimle.data.items);
-        setTitle(phimle.data.titlePage);
-        setTotalPages(phimle.data.params?.pagination?.totalPages || 1);
-        document.title = phimle.data.seoOnPage.titleHead;
+      if (data.data) {
+        setTVShows(data.data.items);
+        setTitle(data.data.titlePage || "TV Shows");
+        setTotalPages(data.data.params?.pagination?.totalPages || 1);
+        document.title = data.data.seoOnPage?.titleHead || "TV Shows - Xem Phim Online";
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching TV Shows data:", error);
+      // Dự phòng: nếu endpoint tv-shows không tồn tại, có thể dùng phim-bo
+      try {
+        const fallbackResponse = await fetch(`https://phimapi.com/v1/api/danh-sach/phim-bo?limit=24&page=${page}`);
+        const fallbackData = await fallbackResponse.json();
+        
+        if (fallbackData.data) {
+          setTVShows(fallbackData.data.items);
+          setTitle("TV Shows");
+          setTotalPages(fallbackData.data.params?.pagination?.totalPages || 1);
+          document.title = "TV Shows - Xem Phim Online";
+        }
+      } catch (fallbackError) {
+        console.error("Fallback error:", fallbackError);
+      }
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchMovies(currentPage);
-  }, [currentPage, movieId]);
+    fetchTVShows(currentPage);
+  }, [currentPage]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -79,7 +92,7 @@ function Movie() {
       )}
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-        {movie.map((data, index) => {
+        {tvShows.map((data, index) => {
           const rating = generateMovieRating(data.slug);
           const ratingFormatted = formatRating(rating);
           
@@ -98,13 +111,13 @@ function Movie() {
                 </a>
               </div>
 
-              {/* Container poster phim */}
+              {/* Container poster TV Show */}
               <div className="w-full aspect-[2/3] bg-gray-900 rounded-lg overflow-hidden shadow-lg transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 relative">
                 <a href={`/info/${data.slug}`}>
                   <img
                     className="w-full h-full object-cover"
                     src={`https://phimimg.com/${data.poster_url}`}
-                    alt={data.name || "card__film"}
+                    alt={data.name || "tv_show"}
                     loading="lazy"
                   />
                 </a>
@@ -120,14 +133,14 @@ function Movie() {
                   <span className="text-white text-xs font-medium">{ratingFormatted.value}</span>
                 </div>
 
-                {/* Icon loại phim */}
-                <div className="absolute bottom-2 left-2 bg-blue-600/90 text-xs font-bold text-white px-2 py-1 rounded flex items-center gap-1">
-                  <Film size={12} />
-                  PHIM LẺ
+                {/* Icon loại TV Shows với icon Monitor */}
+                <div className="absolute bottom-2 left-2 bg-indigo-600/90 text-xs font-bold text-white px-2 py-1 rounded flex items-center gap-1">
+                  <Monitor size={12} />
+                  TV SHOWS
                 </div>
               </div>
 
-              {/* Thông tin phim */}
+              {/* Thông tin TV Show */}
               <div className="mt-2 px-1">
                 <a
                   href={`/info/${data.slug}`}
@@ -141,12 +154,19 @@ function Movie() {
                 >
                   {data.origin_name}
                 </a>
-                {/* Thông tin năm nếu có */}
-                {data.year && (
-                  <div className="text-orange-400 text-xs font-medium">
-                    {data.year}
-                  </div>
-                )}
+                {/* Thông tin tập phim và năm */}
+                <div className="flex justify-between items-center text-xs">
+                  {data.episode_current && (
+                    <div className="text-green-400 font-medium">
+                      {data.episode_current}
+                    </div>
+                  )}
+                  {data.year && (
+                    <div className="text-orange-400 font-medium">
+                      {data.year}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           );
@@ -241,4 +261,4 @@ function Movie() {
   );
 }
 
-export default Movie;
+export default TVShows;

@@ -1,5 +1,3 @@
-import React from "react";
-
 function Footer() {
   return (
     <div className="container mx-auto px-10 py-8">
